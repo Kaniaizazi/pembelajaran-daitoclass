@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PEMBELAJARAN DAITO CLASS</title>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --bg: #f4f6f9;
+      --card-bg: #ffffff;
+      --text: #222222;
+      --muted: #666666;
+      --success: #2e7d32;
+      --warning: #ed6c02;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 20px;
+      background-color: var(--bg);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 480px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0 0 6px;
+      font-size: 24px;
+      color: var(--primary);
+    }
+
+    header p {
+      margin: 0 0 20px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    /* Tab Kategori */
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .tab-btn {
+      flex: 1 1 30%;
+      padding: 10px 8px;
+      border: 2px solid var(--primary);
+      background: white;
+      color: var(--primary);
+      font-weight: bold;
+      font-size: 13px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .tab-btn.active {
+      background: var(--primary);
+      color: white;
+    }
+
+    /* Progress Bar */
+    .progress-box {
+      background: white;
+      padding: 12px 16px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      margin-bottom: 18px;
+      font-size: 14px;
+    }
+
+    .progress-stats {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .progress-bar-bg {
+      width: 100%;
+      height: 10px;
+      background: #e0e0e0;
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--success);
+      transition: width 0.3s ease;
+    }
+
+    /* Kartu 3D Flip */
+    .card-scene {
+      width: 100%;
+      height: 250px;
+      perspective: 1000px;
+      margin-bottom: 16px;
+      cursor: pointer;
+    }
+
+    .card {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transition: transform 0.5s;
+      transform-style: preserve-3d;
+    }
+
+    .card.is-flipped {
+      transform: rotateY(180deg);
+    }
+
+    .card-face {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      background: var(--card-bg);
+      border-radius: 16px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      border: 2px solid #eee;
+    }
+
+    .card-back {
+      transform: rotateY(180deg);
+      background: #fff9f8;
+      border-color: var(--primary);
+    }
+
+    .badge {
+      position: absolute;
+      top: 14px;
+      left: 16px;
+      font-size: 12px;
+      background: #f0f0f0;
+      padding: 4px 10px;
+      border-radius: 99px;
+      color: var(--muted);
+    }
+
+    .status-tag {
+      position: absolute;
+      top: 14px;
+      right: 16px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .jp-text {
+      font-size: 64px;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+
+    .jp-text.vocab {
+      font-size: 42px;
+    }
+
+    .romaji-text {
+      font-size: 28px;
+      font-weight: bold;
+      color: var(--primary);
+      margin-bottom: 6px;
+    }
+
+    .meaning-text {
+      font-size: 18px;
+      color: var(--text);
+    }
+
+    /* Tombol Kontrol */
+    .action-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    button.ctrl {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .btn-flip {
+      background: #333;
+      color: white;
+    }
+
+    .btn-audio {
+      background: #1976d2;
+      color: white;
+    }
+
+    .btn-repeat {
+      background: var(--warning);
+      color: white;
+    }
+
+    .btn-mastered {
+      background: var(--success);
+      color: white;
+    }
+
+    .btn-nav {
+      background: #e0e0e0;
+      color: #333;
+    }
+
+    .btn-reset {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid #ccc;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1>🇯🇵 DAITO CLASS MATERI</h1>
+      <p>Klik kartu atau tombol untuk membalik & dengarkan pelafalannya</p>
+    </header>
+
+    <!-- Pilihan Kategori (3 Tombol: Katakana, Kosakata Dasar, Hiragana) -->
+    <div class="tabs">
+      <button class="tab-btn active" id="tab-katakana" onclick="gantiKategori('katakana')">Huruf Katakana</button>
+      <button class="tab-btn" id="tab-kosakata" onclick="gantiKategori('kosakata')">Kosakata Dasar</button>
+      <button class="tab-btn" id="tab-hiragana" onclick="gantiKategori('hiragana')">Huruf Hiragana</button>
+    </div>
+
+    <!-- Pelacak Progres -->
+    <div class="progress-box">
+      <div class="progress-stats">
+        <span id="card-counter">Kartu 1 / 46</span>
+        <span id="mastered-counter">Hafal: 0 (0%)</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="progress-fill"></div>
+      </div>
+    </div>
+
+    <!-- Kartu Flashcard -->
+    <div class="card-scene" onclick="balikKartu()">
+      <div class="card" id="flashcard">
+        <!-- Sisi Depan -->
+        <div class="card-face card-front">
+          <span class="badge" id="front-badge">Katakana</span>
+          <span class="status-tag" id="front-status"></span>
+          <div class="jp-text" id="jp-display">ア</div>
+          <small style="color:#888;">Ketuk untuk melihat arti</small>
+        </div>
+        <!-- Sisi Belakang -->
+        <div class="card-face card-back">
+          <span class="badge">Pelafalan & Arti</span>
+          <div class="romaji-text" id="romaji-display">a</div>
+          <div class="meaning-text" id="meaning-display">Huruf Katakana "A"</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tombol Balik & Suara -->
+    <div class="action-row">
+      <button class="ctrl btn-flip" onclick="balikKartu()">🔄 Balik Kartu</button>
+      <button class="ctrl btn-audio" onclick="putarSuara()">🔊 Dengar Suara</button>
+    </div>
+
+    <!-- Tombol Pelacak Hafalan -->
+    <div class="action-row">
+      <button class="ctrl btn-repeat" onclick="tandaiKartu(false)">🔁 Ulangi</button>
+      <button class="ctrl btn-mastered" onclick="tandaiKartu(true)">✅ Sudah Hafal</button>
+    </div>
+
+    <!-- Navigasi Manual -->
+    <div class="action-row">
+      <button class="ctrl btn-nav" onclick="geserKartu(-1)">⬅ Sebelumnya</button>
+      <button class="ctrl btn-nav" onclick="geserKartu(1)">Berikutnya ➡</button>
+    </div>
+
+    <button class="btn-reset" onclick="resetProgres()">Reset Progres Kategori Ini</button>
+  </div>
+
+  <script>
+    const materi = {
+      katakana: [
+        { jp: "ア", romaji: "a", arti: "Huruf Katakana 'A'" },
+        { jp: "イ", romaji: "i", arti: "Huruf Katakana 'I'" },
+        { jp: "ウ", romaji: "u", arti: "Huruf Katakana 'U'" },
+        { jp: "エ", romaji: "e", arti: "Huruf Katakana 'E'" },
+        { jp: "オ", romaji: "o", arti: "Huruf Katakana 'O'" },
+        { jp: "カ", romaji: "ka", arti: "Huruf Katakana 'KA'" },
+        { jp: "キ", romaji: "ki", arti: "Huruf Katakana 'KI'" },
+        { jp: "ク", romaji: "ku", arti: "Huruf Katakana 'KU'" },
+        { jp: "ケ", romaji: "ke", arti: "Huruf Katakana 'KE'" },
+        { jp: "コ", romaji: "ko", arti: "Huruf Katakana 'KO'" },
+        { jp: "サ", romaji: "sa", arti: "Huruf Katakana 'SA'" },
+        { jp: "シ", romaji: "shi", arti: "Huruf Katakana 'SHI'" },
+        { jp: "ス", romaji: "su", arti: "Huruf Katakana 'SU'" },
+        { jp: "セ", romaji: "se", arti: "Huruf Katakana 'SE'" },
+        { jp: "ソ", romaji: "so", arti: "Huruf Katakana 'SO'" },
+        { jp: "タ", romaji: "ta", arti: "Huruf Katakana 'TA'" },
+        { jp: "チ", romaji: "chi", arti: "Huruf Katakana 'CHI'" },
+        { jp: "ツ", romaji: "tsu", arti: "Huruf Katakana 'TSU'" },
+        { jp: "テ", romaji: "te", arti: "Huruf Katakana 'TE'" },
+        { jp: "ト", romaji: "to", arti: "Huruf Katakana 'TO'" },
+        { jp: "ナ", romaji: "na", arti: "Huruf Katakana 'NA'" },
+        { jp: "ニ", romaji: "ni", arti: "Huruf Katakana 'NI'" },
+        { jp: "ヌ", romaji: "nu", arti: "Huruf Katakana 'NU'" },
+        { jp: "ネ", romaji: "ne", arti: "Huruf Katakana 'NE'" },
+        { jp: "ノ", romaji: "no", arti: "Huruf Katakana 'NO'" },
+        { jp: "ハ", romaji: "ha", arti: "Huruf Katakana 'HA'" },
+        { jp: "ヒ", romaji: "hi", arti: "Huruf Katakana 'HI'" },
+        { jp: "フ", romaji: "fu", arti: "Huruf Katakana 'FU'" },
+        { jp: "ヘ", romaji: "he", arti: "Huruf Katakana 'HE'" },
+        { jp: "ホ", romaji: "ho", arti: "Huruf Katakana 'HO'" },
+        { jp: "マ", romaji: "ma", arti: "Huruf Katakana 'MA'" },
+        { jp: "ミ", romaji: "mi", arti: "Huruf Katakana 'MI'" },
+        { jp: "ム", romaji: "mu", arti: "Huruf Katakana 'MU'" },
+        { jp: "メ", romaji: "me", arti: "Huruf Katakana 'ME'" },
+        { jp: "モ", romaji: "mo", arti: "Huruf Katakana 'MO'" },
+        { jp: "ヤ", romaji: "ya", arti: "Huruf Katakana 'YA'" },
+        { jp: "ユ", romaji: "yu", arti: "Huruf Katakana 'YU'" },
+        { jp: "ヨ", romaji: "yo", arti: "Huruf Katakana 'YO'" },
+        { jp: "ラ", romaji: "ra", arti: "Huruf Katakana 'RA'" },
+        { jp: "リ", romaji: "ri", arti: "Huruf Katakana 'RI'" },
+        { jp: "ル", romaji: "ru", arti: "Huruf Katakana 'RU'" },
+        { jp: "レ", romaji: "re", arti: "Huruf Katakana 'RE'" },
+        { jp: "ロ", romaji: "ro", arti: "Huruf Katakana 'RO'" },
+        { jp: "ワ", romaji: "wa", arti: "Huruf Katakana 'WA'" },
+        { jp: "ヲ", romaji: "wo", arti: "Huruf Katakana 'WO'" },
+        { jp: "ン", romaji: "n", arti: "Huruf Katakana 'N'" }
+      ],
+      kosakata: [
+        { jp: "おはよう", romaji: "Ohayou", arti: "Selamat pagi (kasual)" },
+        { jp: "こんにちは", romaji: "Konnichiwa", arti: "Halo / Selamat siang" },
+        { jp: "こんばんは", romaji: "Konbanwa", arti: "Selamat malam" },
+        { jp: "ありがとう", romaji: "Arigatou", arti: "Terima kasih" },
+        { jp: "すみません", romaji: "Sumimasen", arti: "Permisi / Maaf" },
+        { jp: "はい", romaji: "Hai", arti: "Ya" },
+        { jp: "いいえ", romaji: "Iie", arti: "Tidak" },
+        { jp: "みず", romaji: "Mizu", arti: "Air" },
+        { jp: "ごはん", romaji: "Gohan", arti: "Nasi / Makanan" },
+        { jp: "せんせい", romaji: "Sensei", arti: "Guru / Pengajar" },
+        { jp: "がくせい", romaji: "Gakusei", arti: "Pelajar / Mahasiswa" },
+        { jp: "おいしい", romaji: "Oishii", arti: "Enak" }
+      ],
+      hiragana: [
+        { jp: "あ", romaji: "a", arti: "Huruf Hiragana 'A'" },
+        { jp: "い", romaji: "i", arti: "Huruf Hiragana 'I'" },
+        { jp: "う", romaji: "u", arti: "Huruf Hiragana 'U'" },
+        { jp: "え", romaji: "e", arti: "Huruf Hiragana 'E'" },
+        { jp: "お", romaji: "o", arti: "Huruf Hiragana 'O'" },
+        { jp: "か", romaji: "ka", arti: "Huruf Hiragana 'KA'" },
+        { jp: "き", romaji: "ki", arti: "Huruf Hiragana 'KI'" },
+        { jp: "く", romaji: "ku", arti: "Huruf Hiragana 'KU'" },
+        { jp: "け", romaji: "ke", arti: "Huruf Hiragana 'KE'" },
+        { jp: "こ", romaji: "ko", arti: "Huruf Hiragana 'KO'" },
+        { jp: "さ", romaji: "sa", arti: "Huruf Hiragana 'SA'" },
+        { jp: "し", romaji: "shi", arti: "Huruf Hiragana 'SHI'" },
+        { jp: "す", romaji: "su", arti: "Huruf Hiragana 'SU'" },
+        { jp: "せ", romaji: "se", arti: "Huruf Hiragana 'SE'" },
+        { jp: "そ", romaji: "so", arti: "Huruf Hiragana 'SO'" },
+        { jp: "た", romaji: "ta", arti: "Huruf Hiragana 'TA'" },
+        { jp: "ち", romaji: "chi", arti: "Huruf Hiragana 'CHI'" },
+        { jp: "つ", romaji: "tsu", arti: "Huruf Hiragana 'TSU'" },
+        { jp: "て", romaji: "te", arti: "Huruf Hiragana 'TE'" },
+        { jp: "と", romaji: "to", arti: "Huruf Hiragana 'TO'" },
+        { jp: "な", romaji: "na", arti: "Huruf Hiragana 'NA'" },
+        { jp: "に", romaji: "ni", arti: "Huruf Hiragana 'NI'" },
+        { jp: "ぬ", romaji: "nu", arti: "Huruf Hiragana 'NU'" },
+        { jp: "ね", romaji: "ne", arti: "Huruf Hiragana 'NE'" },
+        { jp: "の", romaji: "no", arti: "Huruf Hiragana 'NO'" },
+        { jp: "は", romaji: "ha", arti: "Huruf Hiragana 'HA'" },
+        { jp: "ひ", romaji: "hi", arti: "Huruf Hiragana 'HI'" },
+        { jp: "ふ", romaji: "fu", arti: "Huruf Hiragana 'FU'" },
+        { jp: "へ", romaji: "he", arti: "Huruf Hiragana 'HE'" },
+        { jp: "ほ", romaji: "ho", arti: "Huruf Hiragana 'HO'" },
+        { jp: "ま", romaji: "ma", arti: "Huruf Hiragana 'MA'" },
+        { jp: "み", romaji: "mi", arti: "Huruf Hiragana 'MI'" },
+        { jp: "む", romaji: "mu", arti: "Huruf Hiragana 'MU'" },
+        { jp: "め", romaji: "me", arti: "Huruf Hiragana 'ME'" },
+        { jp: "も", romaji: "mo", arti: "Huruf Hiragana 'MO'" },
+        { jp: "や", romaji: "ya", arti: "Huruf Hiragana 'YA'" },
+        { jp: "ゆ", romaji: "yu", arti: "Huruf Hiragana 'YU'" },
+        { jp: "よ", romaji: "yo", arti: "Huruf Hiragana 'YO'" },
+        { jp: "ら", romaji: "ra", arti: "Huruf Hiragana 'RA'" },
+        { jp: "り", romaji: "ri", arti: "Huruf Hiragana 'RI'" },
+        { jp: "る", romaji: "ru", arti: "Huruf Hiragana 'RU'" },
+        { jp: "れ", romaji: "re", arti: "Huruf Hiragana 'RE'" },
+        { jp: "ろ", romaji: "ro", arti: "Huruf Hiragana 'RO'" },
+        { jp: "わ", romaji: "wa", arti: "Huruf Hiragana 'WA'" },
+        { jp: "を", romaji: "wo", arti: "Huruf Hiragana 'WO'" },
+        { jp: "ん", romaji: "n", arti: "Huruf Hiragana 'N'" }
+      ]
+    };
+
+    let kategoriAktif = "katakana";
+    let indeks = 0;
+
+    let progres = {
+      katakana: {},
+      kosakata: {},
+      hiragana: {}
+    };
+
+    function gantiKategori(kat) {
+      kategoriAktif = kat;
+      indeks = 0;
+
+      document.getElementById("tab-katakana").classList.toggle("active", kat === "katakana");
+      document.getElementById("tab-kosakata").classList.toggle("active", kat === "kosakata");
+      document.getElementById("tab-hiragana").classList.toggle("active", kat === "hiragana");
+
+      tampilkanKartu();
+    }
+
+    function tampilkanKartu() {
+      const daftar = materi[kategoriAktif];
+      const item = daftar[indeks];
+      const cardEl = document.getElementById("flashcard");
+
+      cardEl.classList.remove("is-flipped");
+
+      const jpDisplay = document.getElementById("jp-display");
+      jpDisplay.textContent = item.jp;
+      jpDisplay.className = kategoriAktif === "kosakata" ? "jp-text vocab" : "jp-text";
+
+      let labelBadge = "Kosakata";
+      if (kategoriAktif === "katakana") labelBadge = "Katakana";
+      if (kategoriAktif === "hiragana") labelBadge = "Hiragana";
+      document.getElementById("front-badge").textContent = labelBadge;
+
+      document.getElementById("romaji-display").textContent = item.romaji;
+      document.getElementById("meaning-display").textContent = item.arti;
+
+      const statusKartu = progres[kategoriAktif][indeks];
+      const statusTag = document.getElementById("front-status");
+      if (statusKartu === true) {
+        statusTag.textContent = "✅ Sudah Hafal";
+        statusTag.style.color = "#2e7d32";
+      } else if (statusKartu === false) {
+        statusTag.textContent = "🔁 Perlu Diulang";
+        statusTag.style.color = "#ed6c02";
+      } else {
+        statusTag.textContent = "";
+      }
+
+      perbaruiProgres();
+    }
+
+    function balikKartu() {
+      document.getElementById("flashcard").classList.toggle("is-flipped");
+    }
+
+    function geserKartu(arah) {
+      const total = materi[kategoriAktif].length;
+      indeks = (indeks + arah + total) % total;
+      tampilkanKartu();
+    }
+
+    function tandaiKartu(sudahHafal) {
+      progres[kategoriAktif][indeks] = sudahHafal;
+      perbaruiProgres();
+      setTimeout(() => {
+        geserKartu(1);
+      }, 300);
+    }
+
+    function perbaruiProgres() {
+      const daftar = materi[kategoriAktif];
+      const total = daftar.length;
+      const statusMap = progres[kategoriAktif];
+
+      let jumlahHafal = 0;
+      for (let key in statusMap) {
+        if (statusMap[key] === true) jumlahHafal++;
+      }
+
+      const persen = Math.round((jumlahHafal / total) * 100);
+      document.getElementById("card-counter").textContent = `Kartu ${indeks + 1} / ${total}`;
+      document.getElementById("mastered-counter").textContent = `Hafal: ${jumlahHafal} (${persen}%)`;
+      document.getElementById("progress-fill").style.width = `${persen}%`;
+    }
+
+    function putarSuara() {
+      const teksJepang = materi[kategoriAktif][indeks].jp;
+      if ("speechSynthesis" in window) {
+        window.speechSynthesis.cancel();
+        const ucapan = new SpeechSynthesisUtterance(teksJepang);
+        ucapan.lang = "ja-JP";
+        ucapan.rate = 0.9;
+        window.speechSynthesis.speak(ucapan);
+      } else {
+        alert("Maaf, browser Anda tidak mendukung fitur suara otomatis.");
+      }
+    }
+
+    function resetProgres() {
+      progres[kategoriAktif] = {};
+      indeks = 0;
+      tampilkanKartu();
+    }
+
+    tampilkanKartu();
+  </script>
+</body>
+</html>
